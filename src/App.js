@@ -1,43 +1,42 @@
-import './App.css';
+import "./App.css";
+import React from "react";
+import ListItems from "./ListItems";
+import { library } from "@fortawesome/fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
-import React, { Component } from 'react'
-import ListItems from './ListItems';
-import {library} from "@fortawesome/fontawesome-svg-core"
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+library.add(faTrash);
 
-library.add(faTrash)
-
-export class App extends Component {
+class App extends React.Component {
   constructor(props) {
-    super(props)
-
+    super(props);
     this.state = {
       items: [],
       currentItem: {
         text: "",
-        key: ''
-      }
-    }
-    this.handleInput = this.handleInput.bind(this)
-    this.addItem = this.addItem.bind(this)
-    this.deleteItem = this.deleteItem.bind(this)
-    this.setUpdate = this.setUpdate.bind(this)
+        key: "",
+      },
+    };
+    this.handleInput = this.handleInput.bind(this);
+    this.addItem = this.addItem.bind(this);
+    this.deleteItem = this.deleteItem.bind(this);
+    this.setUpdate = this.setUpdate.bind(this);
+
   }
 
-  handleInput(e){
+  handleInput(e) {
     this.setState({
       currentItem: {
         text: e.target.value,
-        key: Date.now()
-      }
-    })
+        key: Date.now(),
+      },
+    });
   }
-
-  addItem(e){
+  addItem(e) {
     e.preventDefault();
     const newItem = this.state.currentItem;
     console.log(newItem);
-    if(newItem.text !== ""){
+    if (newItem.text !== "") {
+
       const newItems = [...this.state.items, newItem];
       this.setState({
         items: newItems,
@@ -48,39 +47,49 @@ export class App extends Component {
       })
     }
   }
-
-  deleteItem(key){
-    const filteredItems = this.state.items.filter(items => items.key !== key);
+  deleteItem(key) {
+    const filteredItems = this.state.items.filter(item =>
+      item.key !== key);
     this.setState({
       items: filteredItems
     })
   }
 
-  setUpdate(text, key){
+  setUpdate(text, key) {
     const items = this.state.items;
     items.map(item => {
-      if(item.key === key){
+      if (item.key === key) {
         item.text = text;
       }
     })
     this.setState({
-      items: items
+      items: items,
     })
   }
   render() {
     return (
       <div className="App">
-      <header>
-        <form id="to-do-form" onSubmit={this.addItem}>
-          <input id="message" type="text" value={this.state.currentItem.text} onChange={this.handleInput} placeholder="Enter Message !!" />
-          <button type="submit">Add</button>
-        </form>
-      </header>
-      <ListItems items={this.state.items} 
-      deleteItem={this.deleteItem} 
-      setUpdate={this.setUpdate} />
+        <header>
+          <form id="to-do-form" onSubmit={this.addItem}>
+            <input
+              type="text"
+              placeholder="Enter Text"
+              value={this.state.currentItem.text}
+              onChange={this.handleInput}
+            />
+            <button type="submit">Add</button>
+          </form>
+        </header>
+
+        <ListItems items={this.state.items}
+          deleteItem={this.deleteItem}
+          setUpdate={this.setUpdate}
+          
+        >
+
+        </ListItems>
       </div>
-    )
+    );
   }
 }
-export default App
+export default App;
